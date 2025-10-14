@@ -10,8 +10,35 @@ import Alert from "react-bootstrap/Alert";
 // Importação do ícone de login
 import { SiRiotgames } from "react-icons/si";
 
+// Importando hook para verificar o login, vindo de useUsuarios
+import { useVerificaLogin } from "../hooks/useUsusarios";
+
+// Importandoa função useForm para verificar do pacote hook-form
+import { useForm } from "react-hook-form";
 
 const Login = () => {
+
+  // register = cria um objeto com os valores retirados dos inputs
+  // handleSubmit = envia os dados formulário, caso dê erro ou sucesso
+  // formState {errors} = objeto que guarda uma lista de erros que aconteceram na tentativa do envio
+  const { register, handleSubmit, formState: {errors} } = useForm()
+
+  // Caso o envio dê certo
+  // data = um objeto com todas as informações preenchidas nos campos do formulário
+  const onSubmit = (data) => {
+    console.log("Dados enviados:", data);
+    
+  }
+
+  // Caso o envio dê certo
+   // errors = um objeto com todos os erros do envio
+  const onError = (errors) => {
+    console.log("Erros:", errors);
+    
+  }
+
+
+
   return (
     <Container className="justify-content-center align-content-center min-vh-100">
       {/* Linhas para os campos de login e ícone */}
