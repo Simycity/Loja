@@ -1,6 +1,10 @@
 import Container from "react-bootstrap/esm/Container";
 import { Outlet, Navigate } from "react-router-dom";
 
+// Importação dos componentes do bootstrap
+import BarraNavegacao from "../components/BarraNavegacao/BarraNavegacao.jsx";
+
+
 // Importando as informações do contexto autenticação de usuário
 import { AuthContext } from "../contexts/UserContext";
 import { useContext } from 'react';
