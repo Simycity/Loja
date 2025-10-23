@@ -13,7 +13,7 @@ import MyRouter from "./MyRouter.jsx"
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 // Importar o provedor do contexto de usuário
-import { AuthContext, AuthProvider } from './contexts/UserContext.jsx'
+import { AuthProvider } from './contexts/UserContext.jsx';
 
 createRoot(document.getElementById('root')).render(
 

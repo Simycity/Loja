@@ -1,0 +1,34 @@
+/* Trocando a cor do body */
+:global(.accordion-body) {
+    background-color: #212529  !important;
+    color: white !important;
+    border: none !important;
+}
+
+:global(.accordion-item){
+    background-color: #212529  !important;
+    border: none !important;
+}
+
+:global(.accordion-header){
+    border: none !important;
+    padding: 0 !important;
+}
+
+:global(.accordion-button){
+    background-color: #212529  !important;
+    color: #fff !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 8px !important;
+}
+
+/* Quando o Acordeon é aberto */
+:global(.accordion-button::after) {
+    filter: invert(1);
+}
+
+/* Quando o Acordeon é aberto */
+:global(.accordion-button:not(.collapsed)::after){
+    filter: invert(1);
+}
