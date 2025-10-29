@@ -9,6 +9,12 @@ import Image from "react-bootstrap/Image";
 // Importando a função useform do pacote hook-form
 import { useForm } from "react-hook-form";
 
+// Importando hook produtos
+import { useListaCategorias, useListaMedidas } from "../../hooks/useProdutos";
+
+// Criando variável para produo sem imagem
+const linkImagem = "https://www.sdlgpecas.com/assets/produto_sem_foto.png"
+
 const FormularioProduto = (props) => {
   // register = cria um objeto com os valores retirados dos inputs
   // handleSumbit = envia os dados formulário, caso dê erro ou sucesso
@@ -18,6 +24,12 @@ const FormularioProduto = (props) => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  // Lista de categorias
+  const cates = useListaCategorias();
+
+  // Lista de medidas
+  const medis = useListaMedidas();
 
   return (
     <div className="text-center">
@@ -91,7 +103,27 @@ const FormularioProduto = (props) => {
             {/* Fim de caixinha de descrição */}
 
             {/* Caixinha de categoria */}
-
+            <FloatingLabel
+              controlId="FI-CATEGORIAS"
+              label="Categoria"
+              className="mb-5"
+            >
+              <Form.Select
+                {...register("categoria", {
+                  validate: (value) => value !== "0" || "Escolha uma Categoria",
+                })}
+              >
+                <option value="0">Escolha uma categoria</option>
+                {cates.map((cat) => {
+                  <option key={cat.id} value={cat.nome}>
+                    {cat.nome}
+                  </option>;
+                })}
+              </Form.Select>
+              {errors.categoria && (
+                <p className="error"> {errors.categoria.message} </p>
+              )}
+            </FloatingLabel>
             {/* Fim de caixinha de categoria */}
 
             {/* Caixinha de marca */}
@@ -142,8 +174,171 @@ const FormularioProduto = (props) => {
             </FloatingLabel>
             {/* Fim de caixinha de fornecedor */}
           </Col>
-          <Col md={12} lg={6}></Col>
+
+          {/* Segunda Coluna */}
+          <Col md={12} lg={6}>
+            {/* Caixinha de quantidade */}
+            <FloatingLabel
+              controlId="FI-QUANTIDADE "
+              label="Quantidade"
+              className="mb-5"
+            >
+              <Form.Control
+                type="number"
+                {...register("quantidade", {
+                  required: "A Quantidade é obrigatório",
+                  min: {
+                    value: 1,
+                    message: "A quantidade deve ser maior que 0(zero)",
+                  },
+                })}
+              ></Form.Control>
+              {errors.quantidade && (
+                <p className="error"> {errors.quantidade.message} </p>
+              )}
+            </FloatingLabel>
+            {/* Fim de caixinha de quantidade */}
+
+            <Row> {/* PRIMEIRA LINHA */}
+              
+              <Col> {/* PRIMEIRA COLUNA */}
+                
+                {/* Caixa de tamanho */}
+                <FloatingLabel
+                  controlId="FI-TAMANHO"
+                  label="Tamanho"
+                  className="mb-5"
+                >
+                  <Form.Control
+                    type="number"
+                    {...register("tamanho", {
+                      required: "O tamanho é Obrigatório",
+                      min: {
+                        value: 1,
+                        message: "O tamanho deve ser maior que 0 (zero)",
+                      },
+                    })}
+                  >
+                    {errors.tamanho && (
+                      <p className="error"> {errors.tamanho.message} </p>
+                    )}
+                  </Form.Control>
+                </FloatingLabel>
+              </Col>
+              {/* Fim da caixa de tamanho */}
+              {/* Caixinha de medidas */}
+              <Col>
+                <FloatingLabel
+                  controlId="FI-MEDIDAS"
+                  label="Medidas"
+                  className="mb-5"
+                >
+                  <Form.Select
+                    {...register("medidas", {
+                      validate: (value) =>
+                        value !== "0" || "Escolha uma medida",
+                    })}
+                  >
+                    <option value="0">Escolha uma medida</option>
+                    {cates.map((med) => {
+                      <option key={med.id} value={med.nome}>
+                        {med.nome}
+                      </option>;
+                    })}
+                  </Form.Select>
+                  {errors.medida && (
+                    <p className="error"> {errors.medida.message} </p>
+                  )}
+                </FloatingLabel>
+              </Col>
+              {/* Fim de caixinha de medidas */}
+            </Row>
+
+            <Row>
+              {" "}
+              {/* SEGUNDA LINHA */}
+              {/* Caixa de Preço de Custo */}
+              <Col>
+                <FloatingLabel
+                  controlId="FI-PC"
+                  label="Preço de custo"
+                  className="mb-5"
+                >
+                  <Form.Control
+                    type="number"
+                    {...register("precoCusto", {
+                      required: "O preço de custo é Obrigatório",
+                      min: {
+                        value: 0.01,
+                        message: "O preço de custo deve ser maior que 0 (zero)",
+                      },
+                    })}
+                  >
+                    {errors.precoCusto && (
+                      <p className="error"> {errors.precoCusto.message} </p>
+                    )}
+                  </Form.Control>
+                </FloatingLabel>
+              </Col>
+              {/* Fim da Caixa de Preço de Custo */}
+              {/* Caixa de Preço de Venda */}
+              <Col>
+                <FloatingLabel
+                  controlId="FI-PV"
+                  label="Preço de venda"
+                  className="mb-5"
+                >
+                  <Form.Control
+                    type="number"
+                    {...register("precoVenda", {
+                      required: "O preço de venda é Obrigatório",
+                      min: {
+                        value: 0.01,
+                        message: "O preço de venda deve ser maior que 0 (zero)",
+                      },
+                    })}
+                  >
+                    {errors.precoVenda && (
+                      <p className="error"> {errors.precoVenda.message} </p>
+                    )}
+                  </Form.Control>
+                </FloatingLabel>
+              </Col>
+              {/* Fim da Caixa de Preço de Venda */}
+            </Row>
+
+            {/* Caixa de Imagem */}
+            <Form.Group controlId="FI-IMAGEM" className="mb-5">
+              <FloatingLabel
+                controlId="FI-IMAGEM"
+                className="mb-5"
+                label="Link da Imagem"
+                className="mb-5"
+              >
+                <Form.Control
+                  type="url"
+                  {...register("imagemUrl", {
+                    required: "O link é obrigatório",
+                    pattern: {
+                      value: /^(http|https):\/\/[^ "]+$/,
+                      message: "Insira um link válido",
+                    },
+                  })}
+                ></Form.Control>
+                {errors.imagemUrl && (
+                  <p className="error"> {errors.imagemUrl.message} </p>
+                )}
+              </FloatingLabel>
+              <Image width={200} height={200} rounded src={linkImagem} />
+            </Form.Group>
+            {/* Fim da Caixa de Imagem */}
+          </Col>
         </Row>
+
+        {/* Crição do botão do envio do formulário */}
+        <Button variant="primary" size="lg" type="submit">
+          {props.page === "editar" ? "Atualizar" : "Cadastrar"}
+        </Button>
       </Form>
     </div>
   );
