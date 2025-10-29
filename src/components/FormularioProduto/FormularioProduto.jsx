@@ -10,12 +10,18 @@ import Image from "react-bootstrap/Image";
 import { useForm } from "react-hook-form";
 
 // Importando hook produtos
-import { useListaCategorias, useListaMedidas } from "../../hooks/useProdutos";
-
-// Criando variável para produo sem imagem
-const linkImagem = "https://www.sdlgpecas.com/assets/produto_sem_foto.png"
+import {
+  useListaCategorias,
+  useListaMedidas,
+  useInserirProduto,
+} from "../../hooks/useProdutos";
 
 const FormularioProduto = (props) => {
+  // IMPORTAÇÃO DAS FUNÇÕES VINDAS DO HOOK USEPRODUTOS
+  // Usando a função de inserir produto
+
+  const { inserirProduto } = useInserirProduto();
+
   // register = cria um objeto com os valores retirados dos inputs
   // handleSumbit = envia os dados formulário, caso dê erro ou sucesso
   // formState { errors } = objeto que guarda uma lista de erros que aconteceram na tentativa do envio
@@ -23,17 +29,47 @@ const FormularioProduto = (props) => {
     register,
     handleSubmit,
     formState: { errors },
+    watch
   } = useForm();
 
   // Lista de categorias
   const cates = useListaCategorias();
-
+  console.log(cates);
+  
   // Lista de medidas
   const medis = useListaMedidas();
+  console.log(medis);
+
+  // Criando variável para produo sem imagem
+  const linkImagem = "https://www.sdlgpecas.com/assets/produto_sem_foto.png";
+
+  // Variável que armazena o link da imagem, vindo do input
+  const imagemAtual = watch("imagemUrl");
+
+  // FUNÇÕES QUE LIDAM COM SUCESSO OU ERRRO DO FORMULÁRIO
+  // Função pra caso dê certo na validação do formulário
+  // data => objeto com as informações dos campos do formulário
+
+  const onSubmit = (data) => {
+    console.log("Dados:", data);
+    if (props.page === "cadastro") {
+      // Envia o objeto data para o hook inserir produto
+      inserirProduto(data);
+      alert("Produto cadastrado com sucesso");
+    } else {
+      // Depois nois vê
+    }
+  };
+
+  // Caso tenha algum erro do formulário, mostra as mensagens de erro dos campos
+  const onError = (errors) => {
+    console.log("Errors:", errors);
+    
+  };
 
   return (
     <div className="text-center">
-      <Form className="mt-3 w-full" onSubmit={""}>
+      <Form className="mt-3 w-full" onSubmit={handleSubmit(onSubmit, onError)}>
         <Row>
           <Col md={12} lg={6}>
             {/* Caixinha de SKU */}
@@ -114,6 +150,7 @@ const FormularioProduto = (props) => {
                 })}
               >
                 <option value="0">Escolha uma categoria</option>
+                <option value="1">Escolha outra categoria</option>
                 {cates.map((cat) => {
                   <option key={cat.id} value={cat.nome}>
                     {cat.nome}
@@ -199,10 +236,12 @@ const FormularioProduto = (props) => {
             </FloatingLabel>
             {/* Fim de caixinha de quantidade */}
 
-            <Row> {/* PRIMEIRA LINHA */}
-              
-              <Col> {/* PRIMEIRA COLUNA */}
-                
+            <Row>
+              {" "}
+              {/* PRIMEIRA LINHA */}
+              <Col>
+                {" "}
+                {/* PRIMEIRA COLUNA */}
                 {/* Caixa de tamanho */}
                 <FloatingLabel
                   controlId="FI-TAMANHO"
@@ -219,10 +258,10 @@ const FormularioProduto = (props) => {
                       },
                     })}
                   >
+                  </Form.Control>
                     {errors.tamanho && (
                       <p className="error"> {errors.tamanho.message} </p>
                     )}
-                  </Form.Control>
                 </FloatingLabel>
               </Col>
               {/* Fim da caixa de tamanho */}
@@ -240,14 +279,15 @@ const FormularioProduto = (props) => {
                     })}
                   >
                     <option value="0">Escolha uma medida</option>
-                    {cates.map((med) => {
+                    <option value="1">L</option>
+                    {medis.map((med) => {
                       <option key={med.id} value={med.nome}>
                         {med.nome}
                       </option>;
                     })}
                   </Form.Select>
-                  {errors.medida && (
-                    <p className="error"> {errors.medida.message} </p>
+                  {errors.medidas && (
+                    <p className="error"> {errors.medidas.message} </p>
                   )}
                 </FloatingLabel>
               </Col>
@@ -274,10 +314,10 @@ const FormularioProduto = (props) => {
                       },
                     })}
                   >
+                  </Form.Control>
                     {errors.precoCusto && (
                       <p className="error"> {errors.precoCusto.message} </p>
                     )}
-                  </Form.Control>
                 </FloatingLabel>
               </Col>
               {/* Fim da Caixa de Preço de Custo */}
@@ -298,10 +338,10 @@ const FormularioProduto = (props) => {
                       },
                     })}
                   >
+                  </Form.Control>
                     {errors.precoVenda && (
                       <p className="error"> {errors.precoVenda.message} </p>
                     )}
-                  </Form.Control>
                 </FloatingLabel>
               </Col>
               {/* Fim da Caixa de Preço de Venda */}
@@ -313,7 +353,6 @@ const FormularioProduto = (props) => {
                 controlId="FI-IMAGEM"
                 className="mb-5"
                 label="Link da Imagem"
-                className="mb-5"
               >
                 <Form.Control
                   type="url"
@@ -329,7 +368,12 @@ const FormularioProduto = (props) => {
                   <p className="error"> {errors.imagemUrl.message} </p>
                 )}
               </FloatingLabel>
-              <Image width={200} height={200} rounded src={linkImagem} />
+              <Image
+                width={200}
+                height={200}
+                rounded
+                src={imagemAtual == "" ? linkImagem : imagemAtual}
+              />
             </Form.Group>
             {/* Fim da Caixa de Imagem */}
           </Col>

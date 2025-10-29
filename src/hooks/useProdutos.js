@@ -1,4 +1,3 @@
-/* eslint-disable no-dupe-keys */
 // url da API
 const url = "http://localhost:5000";
 
@@ -42,12 +41,32 @@ export function useListaMedidas() {
     {
       id: 1,
       nome: "mL",
-      
     },
     {
-        id: 2,
-        nome:  "L"
-    }
+      id: 2,
+      nome: "L",
+    },
   ]);
   return medidas;
+}
+
+// CRUD PRODUTOS
+
+// C
+export function useInserirProduto() {
+  // Recebe dados vindo do formulário, faz uma requisiçaõ para api, para a inserção do produto
+  // Usando POST
+  const inserirProduto = async (data) => {
+    const req = await fetch(`${url}/produtos`, {
+      method: "POST",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    const res = await req.json();
+    console.log("Produto inserido:", res);
+
+    // Retornar o produto inserido
+    return res;
+  };
+  return { inserirProduto };
 }
