@@ -214,3 +214,4 @@ const BarraNavegacao = () => {
 };
 
 export default BarraNavegacao;
+// Barra
