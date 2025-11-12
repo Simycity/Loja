@@ -27,22 +27,6 @@
   ],
   "produtos": [
     {
-      "id_produto": 1,
-      "nome": "Arroz Branco 5Kg",
-      "SKU": "7891001001001",
-      "descricao": "Arroz branco tipo 1, pacote de 5Kg.",
-      "categoria": "Alimentos",
-      "marca": "Tio João",
-      "medida": "Kg",
-      "tamanho": 5,
-      "precoCusto": 18.5,
-      "precoVenda": 25.9,
-      "quantidade": 150,
-      "fornecedor": 1,
-      "imagemUrl": null,
-      "id": "1cd6"
-    },
-    {
       "id_produto": 2,
       "nome": "Leite Integral 1L",
       "SKU": "7892002002002",
