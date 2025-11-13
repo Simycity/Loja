@@ -171,23 +171,23 @@
       "id": "7346"
     },
     {
-      "id": "014b",
-      "nome": "Café",
-      "sku": "cnasjkcnao",
+      "nome": "Café Pelé",
       "descricao": "Café cafu",
       "categoria": "Saúde e Beleza",
+      "imagemUrl": "https://uploads.metroimg.com/wp-content/uploads/2023/01/03150942/WhatsApp-Image-2023-01-03-at-15.09.13.jpeg",
+      "precoVenda": "76",
+      "precoCusto": "70",
       "marca": "Cafuso",
-      "fornecedor": "Cafu",
-      "quantidade": "7",
       "tamanho": "7",
       "medida": "Kg",
-      "precoCusto": "70",
-      "precoVenda": "76.5",
-      "imagemUrl": "https://uploads.metroimg.com/wp-content/uploads/2023/01/03150942/WhatsApp-Image-2023-01-03-at-15.09.13.jpeg"
+      "sku": "cnasjkcnao",
+      "quantidade": "7",
+      "fornecedor": "Cafu",
+      "id": "014b"
     },
     {
       "id": "e12a",
-      "sku": "789100",
+      "SKU": "789100",
       "nome": "Maria das Graças",
       "descricao": "é um bolo, dentro de um pote",
       "categoria": "Eletrônicos",

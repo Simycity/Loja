@@ -88,7 +88,7 @@ const FormularioProduto = (props) => {
               marca: produto.marca,
               tamanho: produto.tamanho,
               medida: produto.medida,
-              sku: produto.sku,
+              sku: produto.SKU,
               quantidade: produto.quantidade,
               fornecedor: produto.fornecedor,
             });
@@ -116,7 +116,11 @@ const FormularioProduto = (props) => {
       alert("Produto cadastrado com sucesso");
     } else {
       // Depois nóis vê
+      // Envia o objeto para o hook de atualizar
+      atualizarProduto(data, id);
+      alert("Produto atualizado com sucesso!");
     }
+    navigate("/home");
   };
   // Caso tenha algum erro no formulário, mostra as mensagens de erro nos campos
   const onError = (errors) => {
@@ -138,7 +142,7 @@ const FormularioProduto = (props) => {
                     message: "O SKU deve ter pelo menos dois caracteres",
                   },
                   maxLength: {
-                    value: 10,
+                    value: 15,
                     message: "O SKU deve ter no máximo 10 caracteres",
                   },
                 })}
@@ -206,9 +210,15 @@ const FormularioProduto = (props) => {
               >
                 <option value="0"> Escolha uma categoria </option>
                 {cates.map((cat) => (
-                  <option key={cat.id} value={cat.nome}>
-                    {" "}
-                    {cat.nome}{" "}
+                  <option
+                    key={cat.id}
+                    value={cat.nome}
+                    // Compara qual é opção que ele deve deixar selecionada
+                    defaultValue={
+                      props.page === "editar" && watch("categoria") === cat.nome
+                    }
+                  >
+                    {cat.nome}
                   </option>
                 ))}
               </Form.Select>
@@ -266,6 +276,7 @@ const FormularioProduto = (props) => {
             </FloatingLabel>
             {/* Fim de caixinha de fornecedor */}
           </Col>
+
           <Col md={12} lg={6}>
             {/* Caixinha de quantidade */}
             <FloatingLabel
@@ -292,7 +303,6 @@ const FormularioProduto = (props) => {
             <Row>
               {/* Primeira linha */}
               <Col>
-                {" "}
                 {/* Primeira coluna */}
                 {/* Caixinha de tamanho */}
                 <FloatingLabel
@@ -331,10 +341,17 @@ const FormularioProduto = (props) => {
                     })}
                   >
                     <option value="0"> Escolha uma medida </option>
-                    {medis.map((med) => (
-                      <option key={med.id} value={med.nome}>
-                        {" "}
-                        {med.nome}{" "}
+                    {cates.map((med) => (
+                      <option
+                        key={med.id}
+                        value={med.nome}
+                        // Compara qual é opção que ele deve deixar selecionada
+                        defaultValue={
+                          props.page === "editar" &&
+                          watch("categoria") === med.nome
+                        }
+                      >
+                        {med.nome}
                       </option>
                     ))}
                   </Form.Select>
