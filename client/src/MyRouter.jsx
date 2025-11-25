@@ -24,7 +24,7 @@ import VerClientes from "./pages/Clientes/VerClientes.jsx";
 
 //Páginas pedidos
 import CadastrarPedido from "./pages/Pedidos/CadastrarPedido.jsx";
-import EditarPedido from "./pages/Pedidos/EditarPedido.jsx";
+import VisualizarPedido from "./pages/Pedidos/VisualizarPedido.jsx";
 import VerPedidos from "./pages/Pedidos/VerPedidos.jsx";
 
 const router = createBrowserRouter([
@@ -115,8 +115,8 @@ const router = createBrowserRouter([
             element: <CadastrarPedido />,
           },
           {
-            path: "editar/:id",
-            element: <EditarPedido />,
+            path: "visualizar/:id",
+            element: <VisualizarPedido />,
           },
         ],
       },

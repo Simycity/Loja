@@ -18,12 +18,10 @@ import {
   useAtualizarProduto,
 } from "../../hooks/useProdutos";
 
-// Navigate - transitar pelas páginas
-// Params - pegar o id fornecido na url
+// Navigate - transitar entre páginas, params - pegar o id fornecido na url
 import { useNavigate, useParams } from "react-router-dom";
 
-// useState - monitorar variáveis
-// useEffect - realizar algo quando o componente carregar
+// UseState- monitar variáveis e useffect pra realizar algo quando o componente carregar
 import { useState, useEffect } from "react";
 
 const FormularioProduto = (props) => {
@@ -31,13 +29,14 @@ const FormularioProduto = (props) => {
   // Usando a função de inserir produto vinda do hook
   const { inserirProduto } = useInserirProduto();
 
-  // Usando função de buscar o produto e atualizar
+  //usando a função de buscar o produto e atualizar
   const { buscarProdutoPorId } = useBuscarProdutoPorId();
   const { atualizarProduto } = useAtualizarProduto();
 
-  // Guardando id do produto vindo da url
+  // Guardando o id do produto vindo da url
   const { id } = useParams();
 
+  // Navigate para trocar de paginas
   const navigate = useNavigate();
 
   // register = cria um objeto com os valores retirados dos inputs
@@ -66,7 +65,7 @@ const FormularioProduto = (props) => {
 
   // CASO O FORMULÁRIO SEJA DE EDIÇÃO, BUSCAR O PRODUTO ID
   if (props.page === "editar") {
-    // Variável que controla se o produto já foi carregado
+    // Variavel que controla se o produto já foi carregado
     const [carregado, setCarregado] = useState();
 
     // Effect pra buscar o produto assim que o componente for montado
@@ -75,6 +74,7 @@ const FormularioProduto = (props) => {
         try {
           // Guarda as informações do produto na variável
           const produto = await buscarProdutoPorId(id);
+          console.log(produto);
 
           // Se houver produto, reseta o formulário com os dados do produto
           if (produto && !carregado) {
@@ -92,11 +92,11 @@ const FormularioProduto = (props) => {
               quantidade: produto.quantidade,
               fornecedor: produto.fornecedor,
             });
-            // Evita chamadas múltiplas do reset
+            //Evita chamadas múltiplas do reset
             setCarregado(true);
           }
         } catch (erro) {
-          console.log("Erro ao buscar produto:", erro);
+          console.log(("Erro ao buscar o produto:", erro));
           alert("Produto não encontrado");
           navigate("/home");
         }
@@ -116,11 +116,11 @@ const FormularioProduto = (props) => {
       alert("Produto cadastrado com sucesso");
     } else {
       // Depois nóis vê
-      // Envia o objeto para o hook de atualizar
+      //Envia o objeto data para o hook atualizar o produto
       atualizarProduto(data, id);
-      alert("Produto atualizado com sucesso!");
+      alert("Produto atualizado com sucesso");
     }
-    navigate("/home");
+    navigate("/home")
   };
   // Caso tenha algum erro no formulário, mostra as mensagens de erro nos campos
   const onError = (errors) => {
@@ -143,7 +143,7 @@ const FormularioProduto = (props) => {
                   },
                   maxLength: {
                     value: 15,
-                    message: "O SKU deve ter no máximo 10 caracteres",
+                    message: "O SKU deve ter no máximo 15 caracteres",
                   },
                 })}
               ></Form.Control>
@@ -210,15 +210,14 @@ const FormularioProduto = (props) => {
               >
                 <option value="0"> Escolha uma categoria </option>
                 {cates.map((cat) => (
-                  <option
-                    key={cat.id}
+                  <option 
+                    key={cat.id} 
                     value={cat.nome}
-                    // Compara qual é opção que ele deve deixar selecionada
-                    defaultValue={
-                      props.page === "editar" && watch("categoria") === cat.nome
-                    }
-                  >
-                    {cat.nome}
+                    // compara qual é a opção que ele deve deixar selecionada
+                    defaultValue = { 
+                      props.page === "editar" && watch("categoria") === cat.nome 
+                      }>
+                        {cat.nome}
                   </option>
                 ))}
               </Form.Select>
@@ -276,7 +275,6 @@ const FormularioProduto = (props) => {
             </FloatingLabel>
             {/* Fim de caixinha de fornecedor */}
           </Col>
-
           <Col md={12} lg={6}>
             {/* Caixinha de quantidade */}
             <FloatingLabel
@@ -303,6 +301,7 @@ const FormularioProduto = (props) => {
             <Row>
               {/* Primeira linha */}
               <Col>
+                {" "}
                 {/* Primeira coluna */}
                 {/* Caixinha de tamanho */}
                 <FloatingLabel
@@ -341,17 +340,14 @@ const FormularioProduto = (props) => {
                     })}
                   >
                     <option value="0"> Escolha uma medida </option>
-                    {cates.map((med) => (
-                      <option
-                        key={med.id}
-                        value={med.nome}
-                        // Compara qual é opção que ele deve deixar selecionada
-                        defaultValue={
-                          props.page === "editar" &&
-                          watch("categoria") === med.nome
-                        }
-                      >
-                        {med.nome}
+                    {medis.map((med) => (
+                      <option key={med.id} value={med.nome}
+                      // compara qual é a opção que ele deve deixar selecionada
+                        defaultValue = { 
+                      props.page === "editar" && watch("medida") === med.nome 
+                      }>
+                        {" "}
+                        {med.nome}{" "}
                       </option>
                     ))}
                   </Form.Select>

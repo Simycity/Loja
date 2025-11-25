@@ -18,7 +18,9 @@ import { useState, useEffect } from "react";
 
 // Importando o hook useInserirFuncionario
 import {
-  useInserirFuncionario
+  useInserirFuncionario,
+  useBuscarFuncionarioPorId,
+  useAtualizaFuncionario,
 } from "../../hooks/useFuncionarios";
 
 const FormularioFuncionario = (props) => {
@@ -39,6 +41,12 @@ const FormularioFuncionario = (props) => {
   // IMPORTAÇÃO DOS HOOKS PARA INSERIR, E ATUALIZAR
   // Usando a funcao de inserir Funcionario vinda do hook
   const { inserirFuncionario } = useInserirFuncionario();
+  // Usando a funcao de buscar Funcionario por id e de atualizar o Funcionario
+  const { buscarFuncionarioPorId } = useBuscarFuncionarioPorId();
+  const { atualizaFuncionario } = useAtualizaFuncionario();
+
+  // Guardando o id do Funcionario vindo da url
+  const { id } = useParams();
 
   // Criando o navigate
   const navigate = useNavigate();
@@ -50,6 +58,44 @@ const FormularioFuncionario = (props) => {
   // Caso o campo de imagem recebe um novo valor, atualiza a imagem de acordo com o campo
   const imagemAtual = watch("imagemUrl");
 
+  //CASO O FORMULÁRIO SEJA DE EDIÇÃO, BUSCAR O Funcionario PELO ID
+  if (props.page === "editar") {
+    // Variavel que controla se o Funcionario já foi carregado
+    const [carregado, setCarregado] = useState(false);
+
+    // Effect pra buscar o Funcionario assim que o componente for montado
+    useEffect(() => {
+      async function fetchFuncionario() {
+        try {
+          const funcionario = await buscarFuncionarioPorId(id);
+          // mudei aqui
+          console.log(funcionario);
+
+          // Se houver Funcionario, reseta o formulário com os dados do Funcionario
+          if (funcionario && !carregado) {
+            reset({
+              nome: funcionario.nome,
+              email: funcionario.email,
+              senha: funcionario.senha,
+              tipo: funcionario.tipo,
+              imagemUrl: funcionario.imagemUrl,
+            });
+            // Evita chamadas múltiplas de reset
+            setCarregado(true);
+          }
+        } catch (erro) {
+          console.error("Erro ao buscar Funcionario:", erro);
+          // Se o erro for de Funcionario não encontrado, redireciona para a página inicial
+          if (erro.message.includes("Unexpected")) {
+            alert("Funcionario não encontrado!");
+            navigate("/home");
+          }
+        }
+      }
+      fetchFuncionario();
+    }, []);
+  }
+
   // FUNCOES QUE LIDAM COM O SUCESSO E ERRO DO FORMULÁRIO
   // funcao pra caso de sucesso na validacao do formulario
   // data é o objeto com os campos do formulário
@@ -60,7 +106,9 @@ const FormularioFuncionario = (props) => {
       inserirFuncionario(data);
       alert("Funcionario cadastrado com sucesso!");
     } else {
-
+      // Envia o objeto data para o hook inserir o Funcionario, junto com o id
+      atualizaFuncionario(data, id);
+      alert("Funcionario atualizado com sucesso!");
     }
     navigate("/home");
   };
@@ -70,6 +118,13 @@ const FormularioFuncionario = (props) => {
     console.log("Erros:", errors);
   };
 
+  // Lista de funcoes
+  const funcoes = [
+    { id: 1, nome: "Funcionário" },
+    { id: 2, nome: "Gerente" },
+    { id: 3, nome: "Administrador" },
+  ];
+  
   return (
     <div className="text-center">
       <Form className="mt-3 w-full" onSubmit={handleSubmit(onSubmit, onError)}>
@@ -147,14 +202,21 @@ const FormularioFuncionario = (props) => {
                   validate: (value) => value !== "0" || "Escolha um tipo",
                 })}
               >
-                <option value="0"> Escolha uma categoria </option>
-                <option value="Funcionário"> Funcionário </option>
-                <option value="Gerente"> Gerente </option>
-                <option value="Administrador"> Administrador </option>
+                <option value="0"> Escolha um tipo </option>
+                {funcoes.map((tipo) => (
+                  <option
+                    key={tipo.id}
+                    value={tipo.nome}
+                    // é pra ser selected, mas tá reclamando
+                    defaultValue={
+                      props.page === "editar" && watch("tipo") === tipo.nome
+                    }
+                  >
+                    {tipo.nome}
+                  </option>
+                ))}
               </Form.Select>
-              {errors.categoria && (
-                <p className="error">{errors.categoria.message}</p>
-              )}
+              {errors.tipo && <p className="error">{errors.tipo.message}</p>}
             </FloatingLabel>
           </Col>
           <Col md={12} lg={6}>
