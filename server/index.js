@@ -12,24 +12,23 @@ app.use(
   })
 );
 
-// Middelware para lidar com os jsons 
+// Middelware para lidar com os jsons
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 
 // Criação das rotas padrões
 const usuariosRouter = require("./routes/usuarioRouter");
 const clientesRouter = require("./routes/clientesRouter");
 const categoriaRouter = require("./routes/categoriaRouter");
-// const pedidosRouter = require("./routes/pedidosRouter");
 const produtosRouter = require("./routes/produtosRouter");
+const pedidosRouter = require("./routes/pedidosRouter");
 
-// Rotas
+// Rotas principais do servidor
 app.use("/usuarios", usuariosRouter);
 app.use("/clientes", clientesRouter);
 app.use("/categoria", categoriaRouter);
-// app.use("/pedidos", pedidosRouter);
 app.use("/produtos", produtosRouter);
+app.use("/pedidos", pedidosRouter);
 
 // Rota padrão do servidor
 app.get("/", (req, res) => {
@@ -40,19 +39,18 @@ app.get("/", (req, res) => {
 const pool = require("./config/db.js");
 
 // Cria uma conexão teste com o banco
-pool.getConnection((erro, conexao) => {
-  // Se deu erro, avisa e encerra a tentativa
-  if (erro) {
-    console.log("Erro ao tentar conectar com o banco de dados");
+(async () => {
+  // Se o banco de dados estiver ativo, o servidor será iniciado
+  try {
+    await pool.getConnection();
+    console.log("Banco Conectado");
+    // Se o banco de dados estiver ativoa, ai sim o servidor será iniciado
+    app.listen(port, () => {
+      console.log(`Servidor funcionando na porta ${port}`);
+    });
+  } catch (erro) {
+    // Se deu erro, avisa e encerra a tentativa
+    console.log("Erro ao conectar com o banco de dados:");
     process.exit(1);
   }
-
-  //   Se deu certo, também avisa e para a conexão
-  console.log("Conectado com o banco de dados com sucesso!");
-  conexao.release();
-  //   Se o banco de dados estiver ativo, ai sim o servidor será iniciado
-  app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`);
-
-  });
-});
+})();
